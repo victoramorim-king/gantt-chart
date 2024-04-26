@@ -50,7 +50,7 @@ behavior: {
             behavior: {
             	clickable: true,
             	draggable: true,
-            	resizable: true
+            	resizable: false
             }
         };
         
@@ -63,6 +63,7 @@ behavior: {
 		}
 
 		function build() {
+			console.log('build')
 			
 			var minDays = Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
 			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data, minDays);
@@ -86,6 +87,8 @@ behavior: {
     }
 
 	function handleMethod(method, value) {
+		console.log('handleMethod')
+
 		
 		if (method == "setSlideWidth") {
 			var div = $("div.ganttview", this);
@@ -100,6 +103,8 @@ behavior: {
 	var Chart = function(div, opts) {
 		
 		function render() {
+			console.log('render')
+
 			addVtHeader(div, opts.data, opts.cellHeight);
 
             var slideDiv = jQuery("<div>", {
@@ -116,11 +121,13 @@ behavior: {
             applyLastClass(div.parent());
 		}
 		
-		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
 		// Creates a 3 dimensional array [year][month][day] of every day 
 		// between the given start and end dates
         function getDates(start, end) {
+			console.log('getDates')
+
             var dates = [];
 			dates[start.getFullYear()] = [];
 			dates[start.getFullYear()][start.getMonth()] = [start]
@@ -138,6 +145,8 @@ behavior: {
         }
 
         function addVtHeader(div, data, cellHeight) {
+			console.log('addVtHeader')
+
             var headerDiv = jQuery("<div>", { "class": "ganttview-vtheader" });
             for (var i = 0; i < data.length; i++) {
                 var itemDiv = jQuery("<div>", { "class": "ganttview-vtheader-item" });
@@ -157,6 +166,8 @@ behavior: {
         }
 
         function addHzHeader(div, dates, cellWidth) {
+			console.log('addHzHeader')
+
             var headerDiv = jQuery("<div>", { "class": "ganttview-hzheader" });
             var monthsDiv = jQuery("<div>", { "class": "ganttview-hzheader-months" });
             var daysDiv = jQuery("<div>", { "class": "ganttview-hzheader-days" });
@@ -182,6 +193,8 @@ behavior: {
         }
 
         function addGrid(div, data, dates, cellWidth, showWeekends) {
+			console.log('addGrid')
+
             var gridDiv = jQuery("<div>", { "class": "ganttview-grid" });
             var rowDiv = jQuery("<div>", { "class": "ganttview-grid-row" });
 			for (var y in dates) {
@@ -207,6 +220,8 @@ behavior: {
         }
 
         function addBlockContainers(div, data) {
+			console.log('addBlockContainers')
+
             var blocksDiv = jQuery("<div>", { "class": "ganttview-blocks" });
             for (var i = 0; i < data.length; i++) {
                 for (var j = 0; j < data[i].series.length; j++) {
@@ -217,6 +232,8 @@ behavior: {
         }
 
         function addBlocks(div, data, cellWidth, start) {
+			console.log('addBlocks')
+
             var rows = jQuery("div.ganttview-blocks div.ganttview-block-container", div);
             var rowIdx = 0;
             for (var i = 0; i < data.length; i++) {
@@ -226,7 +243,7 @@ behavior: {
 					var offset = DateUtils.daysBetween(start, series.start);
 					var block = jQuery("<div>", {
                         "class": "ganttview-block",
-                        "title": series.name + ", " + size + " days",
+                        "title": series.name + ", " + size + " dias",
                         "css": {
                             "width": ((size * cellWidth) - 9) + "px",
                             "margin-left": ((offset * cellWidth) + 3) + "px"
@@ -244,6 +261,8 @@ behavior: {
         }
         
         function addBlockData(block, data, series) {
+			console.log('addBlockData')
+
         	// This allows custom attributes to be added to the series data objects
         	// and makes them available to the 'data' argument of click, resize, and drag handlers
         	var blockData = { id: data.id, name: data.name };
@@ -252,6 +271,8 @@ behavior: {
         }
 
         function applyLastClass(div) {
+			console.log('applyLastClass')
+
             jQuery("div.ganttview-grid-row div.ganttview-grid-row-cell:last-child", div).addClass("last");
             jQuery("div.ganttview-hzheader-days div.ganttview-hzheader-day:last-child", div).addClass("last");
             jQuery("div.ganttview-hzheader-months div.ganttview-hzheader-month:last-child", div).addClass("last");
@@ -280,12 +301,16 @@ behavior: {
 		}
 
         function bindBlockClick(div, callback) {
+			console.log('bindBlockClick')
+
             jQuery("div.ganttview-block", div).live("click", function () {
                 if (callback) { callback(jQuery(this).data("block-data")); }
             });
         }
         
         function bindBlockResize(div, cellWidth, startDate, callback) {
+			console.log('bindBlockResize')
+
         	jQuery("div.ganttview-block", div).resizable({
         		grid: cellWidth, 
         		handles: "e,w",
@@ -298,6 +323,8 @@ behavior: {
         }
         
         function bindBlockDrag(div, cellWidth, startDate, callback) {
+			console.log('bindBlockDrag')
+
         	jQuery("div.ganttview-block", div).draggable({
         		axis: "x", 
         		grid: [cellWidth, cellWidth],
@@ -310,6 +337,8 @@ behavior: {
         }
         
         function updateDataAndPosition(div, block, cellWidth, startDate) {
+			console.log('updateDataAndPosition')
+
         	var container = jQuery("div.ganttview-slide-container", div);
         	var scroll = container.scrollLeft();
 			var offset = block.offset().left - container.offset().left - 1 + scroll;
@@ -348,6 +377,8 @@ behavior: {
     var DateUtils = {
     	
         daysBetween: function (start, end) {
+			console.log('daysBetween')
+
             if (!start || !end) { return 0; }
             start = Date.parse(start); end = Date.parse(end);
             if (start.getYear() == 1901 || end.getYear() == 8099) { return 0; }
@@ -357,10 +388,14 @@ behavior: {
         },
         
         isWeekend: function (date) {
+			console.log('isWeekend')
+
             return date.getDay() % 6 == 0;
         },
 
 		getBoundaryDatesFromData: function (data, minDays) {
+			console.log('getBoundaryDatesFromData')
+
 			var minStart = new Date(); maxEnd = new Date();
 			for (var i = 0; i < data.length; i++) {
 				for (var j = 0; j < data[i].series.length; j++) {

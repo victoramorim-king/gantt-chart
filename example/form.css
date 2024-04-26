@@ -1,0 +1,25 @@
+#ganttChartFormContainer {
+    background-color: #F8F8F8;
+    height: 300px;
+    width: 175px;
+    padding: 20px;
+    margin: 30px;
+    border: #2d2d2d 1px solid;
+    border-radius: 3px;
+}
+
+#ganttChartFormContainer>form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#ganttChartFormContainer>form>input {
+    margin-top: 2px;
+    margin-bottom: 15px;
+}
+
+#ganttChartFormContainer>form>button {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

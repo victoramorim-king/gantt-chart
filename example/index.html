@@ -1,25 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
+
 <head>
 	<link rel="stylesheet" type="text/css" href="../lib/jquery-ui-1.8.4.css" />
 	<link rel="stylesheet" type="text/css" href="reset.css" />
 	<link rel="stylesheet" type="text/css" href="../jquery.ganttView.css" />
+	<link rel="stylesheet" type="text/css" href="form.css" />
+	<link rel="stylesheet" type="text/css" href="modal.css" />
+
 	<style type="text/css">
 		body {
 			font-family: tahoma, verdana, helvetica;
 			font-size: 0.8em;
 			padding: 10px;
 		}
+
+		main {
+			display: flex;
+		}
 	</style>
 	<title>jQuery Gantt</title>
 </head>
+
 <body>
 
-	<div id="ganttChart"></div>
-	<br/><br/>
+	<main>
+		<div> <!-- col 1-->
+			<div id="ganttChart"></div>
+		</div>
+
+		<div> <!-- col 2-->
+
+			<button id="openModalBtn">Open Modal</button>
+
+			<div id="myModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<p id="modal-content-paragraph">Falha ao tentar carregar os dados.</p>
+					<div id="ganttChartFormContainer">
+						<form id="ganttChartForm">
+							<label for="id">id</label>
+							<input type="number" name="id">
+
+							<label for="recurso">Recurso</label>
+							<input type="text" name="recurso">
+
+							<label for="start">Início</label>
+							<input type="date" name="start">
+
+							<label for="end">Fim</label>
+							<input type="date" name="end">
+
+							<button type="button" id="addButton">Adicionar</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+
+
+	</main>
+
+	<br /><br />
 	<div id="eventMessage"></div>
+
+	<script src="modal.js"></script>
 
 	<script type="text/javascript" src="../lib/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../lib/date.js"></script>
@@ -28,28 +77,129 @@
 	<script type="text/javascript" src="data.js"></script>
 	<script type="text/javascript">
 		$(function () {
-			$("#ganttChart").ganttView({ 
+			$("#ganttChart").ganttView({
 				data: ganttData,
 				slideWidth: 900,
 				behavior: {
-					onClick: function (data) { 
+					onClick: function (data) {
 						var msg = "You clicked on an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
-						$("#eventMessage").text(msg);
+						$("#modal-content-paragraph").text(msg);
+						modal.style.display = "block"; // precisa primeiro fazer a modal renderizar para poder mudar os dados dentro dela
+						document.getElementsByName('id')[0].value = data.id;
+						document.getElementsByName('recurso')[0].value = data.name;
+						document.getElementsByName('start')[0].valueAsDate = data.start;
+						document.getElementsByName('end')[0].valueAsDate = data.end;
+
 					},
-					onResize: function (data) { 
+					onResize: function (data) {
 						var msg = "You resized an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
 						$("#eventMessage").text(msg);
 					},
-					onDrag: function (data) { 
+					onDrag: function (data) {
 						var msg = "You dragged an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
 						$("#eventMessage").text(msg);
 					}
 				}
 			});
-			
+
 			// $("#ganttChart").ganttView("setSlideWidth", 600);
 		});
 	</script>
 
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var today = new Date();
+			document.getElementsByName('start')[0].valueAsDate = today;
+			var tomorrow = new Date();
+			tomorrow.setDate(today.getDate() + 1);
+			document.getElementsByName('end')[0].valueAsDate = tomorrow;
+
+			$("#addButton").click(function () {
+
+
+				// Obter os valores dos campos do formulário
+				var idRecurso = $("input[name='id']").val();
+				var nomeRecurso = $("input[name='recurso']").val();
+				var dataInicio = new Date($("input[name='start']").val());
+				var dataFim = new Date($("input[name='end']").val());
+
+				// Verificar se os campos estão preenchidos corretamente
+				if (idRecurso === "") {
+					alert("Por favor, preencha o campo 'Id'.");
+					$("input[name='id']").focus();
+					return;
+				}
+
+				if (nomeRecurso === "") {
+					alert("Por favor, preencha o campo 'Recurso'.");
+					$("input[name='recurso']").focus();
+					return;
+				}
+
+				if (dataInicio == "Invalid Date") {
+					alert("Por favor, selecione a data de início.");
+					$("input[name='start']").focus();
+					return;
+				}
+				if (dataFim == "Invalid Date") {
+					alert("Por favor, selecione a data de fim.");
+					$("input[name='end']").focus();
+					return;
+				}
+
+				// Verificar se a data final é maior que a data inicial
+				var dataInicioObj = new Date(dataInicio);
+				var dataFimObj = new Date(dataFim);
+				if (dataFimObj <= dataInicioObj) {
+					alert("A data de fim deve ser posterior à data de início.");
+					$("input[name='end']").focus();
+					return;
+				}
+
+				// Criar o novo item com os valores do formulário
+				var novoItem = {
+					id: ganttData.length + 1, // Incrementa o ID com base no comprimento atual do array
+					name: nomeRecurso,
+					series: [
+						{ name: "Planejado", start: dataInicio, end: dataFim },
+						{ name: "Real", start: new Date(dataInicio.getTime() + (24 * 60 * 60 * 1000)), end: new Date(dataFim.getTime() + (24 * 60 * 60 * 1000)), color: "#f0f0f0" }
+					]
+				};
+
+				// Adiciona o novo item ao final do array ganttData
+				ganttData[idRecurso -1] = novoItem;
+
+				// Limpa os campos do formulário após adicionar o novo item
+				$("input[name='recurso']").val("");
+				$("input[name='start']").val("");
+				$("input[name='end']").val("");
+
+				// Remova o gráfico Gantt existente antes de criar um novo
+				$("#ganttChart").empty();
+
+				// Inicialize um novo gráfico Gantt com os dados atualizados
+				$("#ganttChart").ganttView({
+					data: ganttData,
+					slideWidth: 900,
+					behavior: {
+						onClick: function (data) {
+							var msg = "You clicked on an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							$("#eventMessage").text(msg);
+						},
+						onResize: function (data) {
+							var msg = "You resized an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							$("#eventMessage").text(msg);
+						},
+						onDrag: function (data) {
+							var msg = "You dragged an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							$("#eventMessage").text(msg);
+						}
+					}
+				});
+			});
+		});
+	</script>
+
 </body>
+
 </html>
