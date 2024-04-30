@@ -2,7 +2,7 @@
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
-var btn = document.getElementById("openModalBtn");
+var btn = document.getElementById("addRecursoBtn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
@@ -10,6 +10,10 @@ var span = document.getElementsByClassName("close")[0];
 // When the user clicks the button, open the modal
 btn.onclick = function() {
   modal.style.display = "block";
+  $("input[name='id']").val(ganttData.length);
+  $("input[name='recurso']").val("a");
+  $("input[name='start']").val("");
+  $("input[name='end']").val("");
 }
 
 // When the user clicks on <span> (x), close the modal
