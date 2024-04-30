@@ -1,51 +1,45 @@
 var ganttData = [
-	{
-		id: 1, name: "Recurso 1", series: [
-			{ name: "Planejado", start: new Date(2024,00,01), end: new Date(2024,00,03) },
-			{ name: "Real", start: new Date(2024,00,02), end: new Date(2024,00,05), color: "#f0f0f0" }
-		]
-	}, 
-	{
-		id: 2, name: "Recurso 2", series: [
-			{ name: "Planejado", start: new Date(2024,00,05), end: new Date(2024,00,20) },
-			{ name: "Real", start: new Date(2024,00,06), end: new Date(2024,00,17), color: "#f0f0f0" },
-			{ name: "Projetado", start: new Date(2024,00,06), end: new Date(2024,00,17), color: "#e0e0e0" }
-		]
-	}, 
-	{
-		id: 3, name: "Recurso 3", series: [
-			{ name: "Planejado", start: new Date(2024,00,11), end: new Date(2024,01,03) },
-			{ name: "Real", start: new Date(2024,00,15), end: new Date(2024,01,03), color: "#f0f0f0" }
-		]
-	}, 
-	{
-		id: 4, name: "Recurso 4", series: [
-			{ name: "Planejado", start: new Date(2024,01,01), end: new Date(2024,01,03) },
-			{ name: "Real", start: new Date(2024,01,01), end: new Date(2024,01,05), color: "#f0f0f0" }
-		]
-	},
-	{
-		id: 5, name: "Recurso 5", series: [
-			{ name: "Planejado", start: new Date(2024,02,01), end: new Date(2024,03,20) },
-			{ name: "Real", start: new Date(2024,02,01), end: new Date(2024,03,26), color: "#f0f0f0" }
-		]
-	}, 
-	{
-		id: 6, name: "Recurso 6", series: [
-			{ name: "Planejado", start: new Date(2024,00,05), end: new Date(2024,00,20) },
-			{ name: "Real", start: new Date(2024,00,06), end: new Date(2024,00,17), color: "#f0f0f0" },
-			{ name: "Projetado", start: new Date(2024,00,06), end: new Date(2024,00,20), color: "#e0e0e0" }
-		]
-	}, 
-	{
-		id: 7, name: "Recurso 7", series: [
-			{ name: "Planejado", start: new Date(2024,00,11), end: new Date(2024,01,03) }
-		]
-	}, 
-	{
-		id: 8, name: "Recurso 8", series: [
-			{ name: "Planejado", start: new Date(2024,01,01), end: new Date(2024,01,03) },
-			{ name: "Real", start: new Date(2024,01,01), end: new Date(2024,01,05), color: "#f0f0f0" }
-		]
-	}
+    {
+        id: 1, name: "Recurso 1", series: [
+            { name: "Planejado", start: new Date(2024, 0, 1, 8, 0), end: new Date(2024, 0, 3, 17, 0) },
+            { name: "Real", start: new Date(2024, 0, 2, 10, 0), end: new Date(2024, 0, 5, 15, 30), color: "#f0f0f0" }
+        ]
+    }, 
+    {
+        id: 2, name: "Recurso 2", series: [
+            { name: "Planejado", start: new Date(2024, 0, 5, 9, 0), end: new Date(2024, 0, 20, 16, 30) },
+            { name: "Real", start: new Date(2024, 0, 6, 8, 0), end: new Date(2024, 0, 17, 17, 0), color: "#f0f0f0" },
+            { name: "Projetado", start: new Date(2024, 0, 6, 8, 0), end: new Date(2024, 0, 17, 17, 0), color: "#e0e0e0" }
+        ]
+    }, 
+    {
+        id: 3, name: "Recurso 3", series: [
+            { name: "Planejado", start: new Date(2024, 0, 11, 7, 30), end: new Date(2024, 1, 3, 18, 0) },
+            { name: "Real", start: new Date(2024, 0, 15, 9, 0), end: new Date(2024, 1, 3, 16, 45), color: "#f0f0f0" }
+        ]
+    }, 
+    {
+        id: 4, name: "Recurso 4", series: [
+            { name: "Planejado", start: new Date(2024, 1, 1, 8, 0), end: new Date(2024, 1, 3, 17, 30) },
+            { name: "Real", start: new Date(2024, 1, 1, 8, 0), end: new Date(2024, 1, 5, 16, 0), color: "#f0f0f0" }
+        ]
+    },
+    {
+        id: 5, name: "Recurso 5", series: [
+            { name: "Planejado", start: new Date(2024, 0, 5, 9, 0), end: new Date(2024, 0, 20, 16, 30) },
+            { name: "Real", start: new Date(2024, 0, 6, 8, 0), end: new Date(2024, 0, 17, 17, 0), color: "#f0f0f0" },
+            { name: "Projetado", start: new Date(2024, 0, 6, 8, 0), end: new Date(2024, 0, 20, 16, 30), color: "#e0e0e0" }
+        ]
+    }, 
+    {
+        id: 6, name: "Recurso 6", series: [
+            { name: "Planejado", start: new Date(2024, 0, 11, 7, 30), end: new Date(2024, 1, 3, 18, 0) }
+        ]
+    }, 
+    {
+        id: 7, name: "Recurso 7", series: [
+            { name: "Planejado", start: new Date(2024, 1, 1, 8, 0), end: new Date(2024, 1, 3, 17, 30) },
+            { name: "Real", start: new Date(2024, 1, 1, 8, 0), end: new Date(2024, 1, 5, 16, 0), color: "#f0f0f0" }
+        ]
+    }
 ];

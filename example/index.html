@@ -47,10 +47,10 @@
 							<input type="text" name="recurso">
 
 							<label for="start">Início</label>
-							<input type="date" name="start">
+							<input type="datetime-local" name="start">
 
 							<label for="end">Fim</label>
-							<input type="date" name="end">
+							<input type="datetime-local" name="end">
 
 							<button type="button" id="addButton">Adicionar</button>
 						</form>
@@ -75,6 +75,24 @@
 	<script type="text/javascript" src="../lib/jquery-ui-1.8.4.js"></script>
 	<script type="text/javascript" src="../jquery.ganttView.js"></script>
 	<script type="text/javascript" src="data.js"></script>
+
+	<script>
+		function formatarDataHora(data) {
+			var dia = data.getDate();
+			var mes = data.getMonth() + 1;
+			var ano = data.getFullYear();
+			var hora = data.getHours();
+			var minuto = data.getMinutes();
+
+			// Garantindo que os números tenham dois dígitos
+			dia = dia < 10 ? '0' + dia : dia;
+			mes = mes < 10 ? '0' + mes : mes;
+			hora = hora < 10 ? '0' + hora : hora;
+			minuto = minuto < 10 ? '0' + minuto : minuto;
+
+			return ano + "-" + mes + "-" + dia + "T" + hora + ":" + minuto;
+		}
+	</script>
 	<script type="text/javascript">
 		$(function () {
 			$("#ganttChart").ganttView({
@@ -82,21 +100,29 @@
 				slideWidth: 900,
 				behavior: {
 					onClick: function (data) {
-						var msg = "You clicked on an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+						var startFormatted = formatarDataHora(data.start);
+						var endFormatted = formatarDataHora(data.end);
+
+						var msg = "Você clicou em um evento: { start: " + startFormatted + ", end: " + endFormatted + " }";
 						$("#modal-content-paragraph").text(msg);
-						modal.style.display = "block"; // precisa primeiro fazer a modal renderizar para poder mudar os dados dentro dela
+						modal.style.display = "block";
+
 						document.getElementsByName('id')[0].value = data.id;
 						document.getElementsByName('recurso')[0].value = data.name;
-						document.getElementsByName('start')[0].valueAsDate = data.start;
-						document.getElementsByName('end')[0].valueAsDate = data.end;
+
+						// Configurando a data de início
+						document.getElementsByName('start')[0].value = startFormatted;
+
+						// Configurando a data de término
+						document.getElementsByName('end')[0].value = endFormatted;
 
 					},
 					onResize: function (data) {
-						var msg = "You resized an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+						var msg = "You resized an event: { start: " + data.start.toString("dd/MM/yyyy HH:mm") + ", end: " + data.end.toString("dd/MM/yyyy HH:mm") + " }";
 						$("#eventMessage").text(msg);
 					},
 					onDrag: function (data) {
-						var msg = "You dragged an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+						var msg = "You dragged an event: { start: " + data.start.toString("dd/MM/yyyy HH:mm") + ", end: " + data.end.toString("dd/MM/yyyy HH:mm") + " }";
 						$("#eventMessage").text(msg);
 					}
 				}
@@ -109,10 +135,24 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			var today = new Date();
-			document.getElementsByName('start')[0].valueAsDate = today;
+			var startInput = document.getElementsByName('start')[0];
+			var endInput = document.getElementsByName('end')[0];
+
+			// Configurar a data e hora atual para o input de início
+			startInput.value = today.getFullYear() + '-' +
+				('0' + (today.getMonth() + 1)).slice(-2) + '-' +
+				('0' + today.getDate()).slice(-2) + 'T' +
+				('0' + today.getHours()).slice(-2) + ':' +
+				('0' + today.getMinutes()).slice(-2);
+
+			// Configurar a data e hora para amanhã para o input de fim
 			var tomorrow = new Date();
 			tomorrow.setDate(today.getDate() + 1);
-			document.getElementsByName('end')[0].valueAsDate = tomorrow;
+			endInput.value = tomorrow.getFullYear() + '-' +
+				('0' + (tomorrow.getMonth() + 1)).slice(-2) + '-' +
+				('0' + tomorrow.getDate()).slice(-2) + 'T' +
+				('0' + today.getHours()).slice(-2) + ':' +
+				('0' + today.getMinutes()).slice(-2);
 
 			$("#addButton").click(function () {
 
@@ -167,7 +207,7 @@
 				};
 
 				// Adiciona o novo item ao final do array ganttData
-				ganttData[idRecurso -1] = novoItem;
+				ganttData[idRecurso - 1] = novoItem;
 
 				// Limpa os campos do formulário após adicionar o novo item
 				$("input[name='recurso']").val("");
@@ -183,19 +223,20 @@
 					slideWidth: 900,
 					behavior: {
 						onClick: function (data) {
-							var msg = "You clicked on an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							var msg = "Você clicou em um evento: { start: " + data.start.toString("dd/MM/yyyy HH:mm") + ", end: " + data.end.toString("dd/MM/yyyy HH:mm") + " }";
 							$("#eventMessage").text(msg);
 						},
 						onResize: function (data) {
-							var msg = "You resized an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							var msg = "Você redimensionou um evento: { start: " + data.start.toString("dd/MM/yyyy HH:mm") + ", end: " + data.end.toString("dd/MM/yyyy HH:mm") + " }";
 							$("#eventMessage").text(msg);
 						},
 						onDrag: function (data) {
-							var msg = "You dragged an event: { start: " + data.start.toString("M/d/yyyy") + ", end: " + data.end.toString("M/d/yyyy") + " }";
+							var msg = "Você arrastou um evento: { start: " + data.start.toString("dd/MM/yyyy HH:mm") + ", end: " + data.end.toString("dd/MM/yyyy HH:mm") + " }";
 							$("#eventMessage").text(msg);
 						}
 					}
 				});
+
 			});
 		});
 	</script>
