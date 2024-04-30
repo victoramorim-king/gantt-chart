@@ -11,7 +11,7 @@ var span = document.getElementsByClassName("close")[0];
 btn.onclick = function() {
   modal.style.display = "block";
   $("input[name='id']").val(ganttData.length);
-  $("input[name='recurso']").val("a");
+  $("input[name='recurso']").val("");
   $("input[name='start']").val("");
   $("input[name='end']").val("");
 }
