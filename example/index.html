@@ -75,24 +75,9 @@
 	<script type="text/javascript" src="../lib/jquery-ui-1.8.4.js"></script>
 	<script type="text/javascript" src="../jquery.ganttView.js"></script>
 	<script type="text/javascript" src="data.js"></script>
+	<script type="text/javascript" src="formatarDataHora.js"></script>
 
-	<script>
-		function formatarDataHora(data) {
-			var dia = data.getDate();
-			var mes = data.getMonth() + 1;
-			var ano = data.getFullYear();
-			var hora = data.getHours();
-			var minuto = data.getMinutes();
-
-			// Garantindo que os números tenham dois dígitos
-			dia = dia < 10 ? '0' + dia : dia;
-			mes = mes < 10 ? '0' + mes : mes;
-			hora = hora < 10 ? '0' + hora : hora;
-			minuto = minuto < 10 ? '0' + minuto : minuto;
-
-			return ano + "-" + mes + "-" + dia + "T" + hora + ":" + minuto;
-		}
-	</script>
+	
 	<script type="text/javascript">
 		$(function () {
 			$("#ganttChart").ganttView({
